@@ -44,7 +44,19 @@ module.exports = function (config) {
         // - PhantomJS
         // - IE (only Windows)
         // CLI --browsers Chrome,Firefox,Safari
-        browsers: process.env.TRAVIS ? ['Firefox', 'Chrome_travis_ci'] : ['Chrome'],
+        browsers: [process.env.TRAVIS ? 'Firefox' : 'Chrome'],
+
+        detectBrowsers: {
+          postDetection: function(browsers) {
+            if(process.env.TRAVIS) {
+              var index = browsers.indexOf('Chrome');
+              if(index !== -1) {
+                browsers[index] = 'Chrome_travis_ci';
+              }
+            }
+            return browsers;
+          }
+        },
 
         customLaunchers: {
           Chrome_travis_ci: {
