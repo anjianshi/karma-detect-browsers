@@ -46,25 +46,6 @@ module.exports = function (config) {
         // CLI --browsers Chrome,Firefox,Safari
         browsers: [process.env.TRAVIS ? 'Firefox' : 'Chrome'],
 
-        detectBrowsers: {
-          postDetection: function(browsers) {
-            if(process.env.TRAVIS) {
-              var index = browsers.indexOf('Chrome');
-              if(index !== -1) {
-                browsers[index] = 'Chrome_travis_ci';
-              }
-            }
-            return browsers;
-          }
-        },
-
-        customLaunchers: {
-          Chrome_travis_ci: {
-            base: 'Chrome',
-            flags: ['--no-sandbox']
-          }
-        },
-
         // If browser does not capture in given timeout [ms], kill it
         // CLI --capture-timeout 5000
         captureTimeout: 20000,
