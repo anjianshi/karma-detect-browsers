@@ -13,19 +13,38 @@ var DetectBrowsers = function (config, logger) {
      * @returns {Array}
      */
     function getInstalledBrowsers (browsers) {
+        /**
+         * var browsers = {
+         *     "chrome": {
+         *         name: 'Chrome',
+         *         DEFAULT_CMD: {
+         *             linux: ['google-chrome', 'chromium-browser']
+         *         },
+         *         ENV_CMD: 'CHROME_BIN'
+         *     },
+         *     "firefox": {}
+         * };
+         *
+         * var browserNames = ["chrome", "firefox"];
+         */
+
         var i, length,
             browserNames = Object.keys(browsers),
             result = [];
 
         // iterate over all browsers in the browsers folder
         for (i = 0, length = browserNames.length; i < length; i++) {
-            var browser = browsers[browserNames[i]],
-                browserPaths = browser.DEFAULT_CMD[process.platform] || [],
+            var browser = browsers[browserNames[i]],    //  { name: "Chrome", DEFAULT_CMD: [] }
+                browserPaths = browser.DEFAULT_CMD[process.platform] || [], // ['google-chrome', 'chromium-browser']
                 y, paths = browserPaths.length;
 
             // iterate over all browser paths
             for (y = 0; y < paths; y++) {
                 if (fs.existsSync(browserPaths[y]) || process.env[browser.ENV_CMD] || fs.existsSync(path.join('/', 'usr', 'bin', browserPaths[y]))) {
+                    log.info("browser", browser.name, "found: ",
+                        path.join('/', 'usr', 'bin', browserPaths[y]),
+                        fs.existsSync(path.join('/', 'usr', 'bin', browserPaths[y]))
+                    );
                     // add browser when found in file system or when env variable is set
                     result.push(browser.name);
 
